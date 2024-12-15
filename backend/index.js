@@ -4,31 +4,22 @@ const multer = require("multer");
 const xlsx = require("xlsx");
 const fs = require("fs");
 const cors = require("cors");
-require('dotenv').config();
+
 
 const app = express();
-const PORT = 5000;
 
-// Middleware
-app.use(
-  cors({
-    origin: "*", // Allow requests from any origin
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allow these HTTP methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Allow these headers
-  })
-);
+
+
+app.use(cors());
 app.use(express.json());
 
-// MongoDB connection
-mongoose.connect(process.env.mongo_url, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
 
-// Multer configuration for file uploads
+
+
+
 const upload = multer({ dest: "uploads/" });
 
-// Route to upload Excel file and dynamically create a collection
+
 app.post("/upload", upload.single("file"), async (req, res) => {
   try {
     const filePath = req.file.path;
@@ -60,7 +51,6 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   }
 });
 
-// Route to fetch all collections and their data
 app.get("/data", async (req, res) => {
   try {
     const collections = await mongoose.connection.db.listCollections().toArray();
@@ -82,7 +72,7 @@ app.get("/data", async (req, res) => {
   }
 });
 
-// Route to update a specific document in a collection
+
 app.put("/data/:collection/:id", async (req, res) => {
   try {
     const { collection, id } = req.params;
@@ -102,7 +92,7 @@ app.put("/data/:collection/:id", async (req, res) => {
   }
 });
 
-// Route to delete a specific document in a collection
+
 app.delete("/data/:collection/:id", async (req, res) => {
   try {
     const { collection, id } = req.params;
@@ -122,7 +112,7 @@ app.delete("/data/:collection/:id", async (req, res) => {
   }
 });
 
-// Route to delete an entire collection
+
 app.delete("/collection/:collection", async (req, res) => {
   try {
     const { collection } = req.params;
@@ -137,7 +127,10 @@ app.delete("/collection/:collection", async (req, res) => {
   }
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+mongoose.connect('mongodb+srv://admin:sunriseeast1234RAS@royoapi.3qmdrjq.mongodb.net/xup?retryWrites=true&w=majority&appName=RoyoApi').then(()=>{
+  app.listen(8083, () => {
+  console.log('server running');
 });
+  
+});
+
