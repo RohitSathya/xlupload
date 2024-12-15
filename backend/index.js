@@ -134,8 +134,8 @@ app.delete("/collection/:collection", async (req, res) => {
 });
 
 mongoose.connect('mongodb+srv://admin:sunriseeast1234RAS@royoapi.3qmdrjq.mongodb.net/xup?retryWrites=true&w=majority&appName=RoyoApi').then(()=>{
-  app.listen(8080, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  app.listen(8082, () => {
+  console.log('server running');
 });
   
 });
