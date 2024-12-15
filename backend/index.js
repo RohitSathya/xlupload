@@ -7,7 +7,7 @@ const cors = require("cors");
 require('dotenv').config();
 
 const app = express();
-const PORT = 8081;
+
 
 // Middleware
 app.use(
@@ -138,6 +138,6 @@ app.delete("/collection/:collection", async (req, res) => {
 });
 
 // Start the server
-app.listen(PORT, () => {
+app.listen(8080, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
