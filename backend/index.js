@@ -9,7 +9,7 @@ require('dotenv').config();
 const app = express();
 
 
-// Middleware
+
 app.use(
   cors({
     origin: "*", 
@@ -19,16 +19,13 @@ app.use(
 );
 app.use(express.json());
 
-// MongoDB connection
-mongoose.connect(process.env.mongo_url, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
 
-// Multer configuration for file uploads
+
+
+
 const upload = multer({ dest: "uploads/" });
 
-// Route to upload Excel file and dynamically create a collection
+
 app.post("/upload", upload.single("file"), async (req, res) => {
   try {
     const filePath = req.file.path;
@@ -60,7 +57,6 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   }
 });
 
-// Route to fetch all collections and their data
 app.get("/data", async (req, res) => {
   try {
     const collections = await mongoose.connection.db.listCollections().toArray();
@@ -82,7 +78,7 @@ app.get("/data", async (req, res) => {
   }
 });
 
-// Route to update a specific document in a collection
+
 app.put("/data/:collection/:id", async (req, res) => {
   try {
     const { collection, id } = req.params;
@@ -102,7 +98,7 @@ app.put("/data/:collection/:id", async (req, res) => {
   }
 });
 
-// Route to delete a specific document in a collection
+
 app.delete("/data/:collection/:id", async (req, res) => {
   try {
     const { collection, id } = req.params;
@@ -122,7 +118,7 @@ app.delete("/data/:collection/:id", async (req, res) => {
   }
 });
 
-// Route to delete an entire collection
+
 app.delete("/collection/:collection", async (req, res) => {
   try {
     const { collection } = req.params;
@@ -137,7 +133,10 @@ app.delete("/collection/:collection", async (req, res) => {
   }
 });
 
-// Start the server
-app.listen(8080, () => {
+mongoose.connect(process.env.mongo_url).then(()=>{
+  app.listen(8080, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
+  
+});
+
