@@ -78,20 +78,32 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 });
 
 // Route to fetch all collections and their data
+// Route to fetch all collections and their data
 app.get("/data", async (req, res) => {
   try {
     await connectToDatabase();
 
+    // List all collections from the database
     const collections = await mongoose.connection.db.listCollections().toArray();
     if (collections.length === 0) {
       return res.status(404).send({ message: "No data found in the database." });
     }
 
     const allData = {};
+
+    // Fetch documents for each collection
     for (const collection of collections) {
-      const modelName = collection.name;
-      const Model = mongoose.models[modelName] || mongoose.model(modelName, new mongoose.Schema({}, { strict: false }));
-      allData[modelName] = await Model.find({});
+      const collectionName = collection.name;
+
+      // Dynamically load models without caching issues
+      let Model;
+      if (mongoose.models[collectionName]) {
+        Model = mongoose.models[collectionName];
+      } else {
+        Model = mongoose.model(collectionName, new mongoose.Schema({}, { strict: false }), collectionName);
+      }
+
+      allData[collectionName] = await Model.find({});
     }
 
     res.status(200).json(allData);
@@ -100,6 +112,7 @@ app.get("/data", async (req, res) => {
     res.status(500).send({ message: "Error fetching data." });
   }
 });
+
 
 // Route to update a specific document in a collection
 app.put("/data/:collection/:id", async (req, res) => {
