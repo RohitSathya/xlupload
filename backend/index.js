@@ -11,7 +11,7 @@ const PORT = 8083;
 // Middleware
 app.use(
   cors({
-    origin: "*", // Allow requests from any origin
+    origin: ["https://explorepricing.com","https://www.clothinbittinc.com/","https://www.clothinbittinc.com"], // Add your client domain here
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
